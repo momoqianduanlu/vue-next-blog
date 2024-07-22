@@ -10,13 +10,12 @@ export default defineConfig({
     nav: [
       { text: 'Vue2源码解析', link: 'https://momoqianduanlu.github.io/vue-analysis-blog/' },
     ],
-
     sidebar: [
       {
         text: 'reactive的响应性',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: '源码阅读', link: '/markdown-examples' },
+          { text: '源码实现', link: '/api-examples' }
         ]
       },
       {

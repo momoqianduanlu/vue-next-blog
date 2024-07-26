@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # reactive 响应性
 
 首先，我们先来探究 `reactive` 响应性函数的源码实现，通过 debugger 来看一下一个普通对象如何变成一个响应式对象，通过一个简单的 demo 让我们来一探究竟。
@@ -279,6 +283,8 @@ if (!isReadonly) {
 }
 ~~~
 
+### track
+
 现在我们要重点关注这个 `track` 函数，`Vue`的响应式核心就是**依赖收集**和**派发更新**，而这里的 `track` 就是依赖收集的过程，
 
 ~~~javascript
@@ -397,7 +403,7 @@ function createSetter(shallow = false) {
 
    <img src="/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/setter2.png" alt="setter2" style="zoom:50%;" />
 
-### trigger 派发更新
+### trigger 
 
 `trigger` 在这里是 **触发** 的意思，那么我们来看 `trigger` 内部做了什么？
 

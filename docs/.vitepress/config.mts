@@ -15,12 +15,17 @@ export default defineConfig({
         text: 'reactive的响应性',
         items: [
           { text: '源码阅读', link: '/reactive/' },
-          { text: '源码实现', link: '/reactive/code' }
+          { text: '源码实现', link: '/reactive/code' },
+          { text: '总结', link: '/reactive/report' },
         ]
       },
       {
         text: 'ref的响应性',
-        items: []
+        items: [
+          { text: '源码阅读', link: '/api-examples' },
+          { text: '源码实现', link: '/ref/code' },
+          { text: '总结', link: '/ref/report' },
+        ]
       },
       {
         text: 'computed && watch',

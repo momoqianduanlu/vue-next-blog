@@ -14,8 +14,8 @@ export default defineConfig({
       {
         text: 'reactive的响应性',
         items: [
-          { text: '源码阅读', link: '/markdown-examples' },
-          { text: '源码实现', link: '/api-examples' }
+          { text: '源码阅读', link: '/reactive/' },
+          { text: '源码实现', link: '/reactive/code' }
         ]
       },
       {

@@ -22,7 +22,7 @@ export default defineConfig({
       {
         text: 'ref的响应性',
         items: [
-          { text: '源码阅读', link: '/api-examples' },
+          { text: '源码阅读', link: '/ref/' },
           { text: '源码实现', link: '/ref/code' },
           { text: '总结', link: '/ref/report' },
         ]

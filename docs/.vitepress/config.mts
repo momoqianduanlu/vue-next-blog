@@ -29,7 +29,19 @@ export default defineConfig({
       },
       {
         text: 'computed && watch',
-        items: []
+        items: [
+          { text: '源码阅读', link: '/computed/' },
+          { text: '源码实现', link: '/computed/code' },
+          { text: '总结', link: '/computed/report' },
+        ]
+      },
+      {
+        text: 'watch',
+        items: [
+          { text: '源码阅读', link: '/watch/' },
+          { text: '源码实现', link: '/watch/code' },
+          { text: '总结', link: '/watch/report' },
+        ]
       }
     ],
 

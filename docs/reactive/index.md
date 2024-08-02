@@ -26,7 +26,7 @@ outline: deep
 
 在浏览器直接运行这个例子，直接进入debugger模式，
 
-## reactive实现
+## reactive的实现
 
 ```javascript
 // if trying to observe a readonly proxy, return the readonly version.
@@ -242,7 +242,7 @@ run() {
 
 `activeEffect` 是当前正在激活的 `effect`，`this` 指向的是 `_effect` 实例，`activeEffect` 在这里是空的，
 
-紧接着又把 this 指向了 `activeEffect`，他的目的是让我们在做毅力啊手机的时候去记录当前正在激活的 `activeEffect`，以便于在派发更新的时候能再次触发 `fn` 函数进行更新。
+紧接着又把 this 指向了 `activeEffect`，他的目的是让我们在做依赖收集的时候去记录当前正在激活的 `activeEffect`，以便于在派发更新的时候能再次触发 `fn` 函数进行更新。
 
 <img src="/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/activeEffect.png" alt="activeEffect" style="zoom:50%;" />
 

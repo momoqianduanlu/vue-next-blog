@@ -9,7 +9,7 @@ outline: deep
 1. `reactive` 只能对 **复杂数据** 类型进行使用，
 2. `reactive` 的响应性数据，不可以进行解构，
 
-因为 `reactive` 的不足，所以 `vue 3` 又为我们提供了 `ref` 函数构建响应性，那么：
+因为 `reactive` 的不足，所以 `vue3` 又为我们提供了 `ref` 函数构建响应性，那么：
 
 1. `ref` 函数是如何实现的呢？
 2. `ref` 可以构建简单数据类型的响应性吗？
@@ -44,9 +44,9 @@ outline: deep
 
 ### ref 函数
 
-1. `ref` 函数中，直接触发 `createRef` 函数
+1. `ref` 函数中，直接触发 `createRef` 函数，
 
-2. 在 `createRef` 中，进行了判断如果当前已经是一个 `ref` 类型数据则直接返回，否则 **返回 `RefImpl` 类型的实例**
+2. 在 `createRef` 函数中，进行了判断如果当前已经是一个 `ref` 类型的数据则直接返回，否则 **返回 `RefImpl` 类型的实例**
 
    ~~~javascript
    export function ref(value?: unknown) {
@@ -100,7 +100,7 @@ outline: deep
 
       `_rawValue` 可以简单理解为，`__v_isShallow` 是不是一个简单数据类型，如果是直接返回 `value`，如果不是则调用 `toRaw`，这里，`_rawValue` 是 undefined，
 
-   2. 对于 `_value`，`value` 在这里传入的是一个对象，所以他不是简单的数据类型，然后我们调用了 `toReactive` ，
+   2. 对于 `_value`，`value` 在这里传入的是一个对象，所以他不是简单的数据类型，然后我们调用了 `toReactive`函数 ，
 
       那么我们来看看 `toReactive` 的作用：
 
@@ -171,7 +171,7 @@ class RefImpl<T> {
 
 1. 在 `get value` 中会触发 `trackRefValue` 方法，
 
-   1. 触发 `trackEffects` 函数，并且在此时为 `ref` 新增了一个 `dep` 属性，这个 `dep` 在实例化 `RefImpl` 的时候声明过，在这里是 undefined，所以给他赋值 `createDep()`，
+   1. 触发 `trackEffects` 函数，并且在此时为 `ref` 新增了一个 `dep` 属性，这个 `dep` 属性在实例化 `RefImpl` 的时候声明过，在这里是 undefined，所以给他赋值 `createDep()`，
 
       ~~~javascript
       export function trackRefValue(ref: RefBase<any>) {
@@ -235,7 +235,7 @@ class RefImpl<T> {
 obj.value.name = '李四'
 ~~~
 
-但是这里**有一个很关键的问题**，需要大家进行思考，那就是：**此时会触发 `get value` 还是 `set value` ？**
+但是这里**有一个很关键的问题**，那就是：**此时会触发 `get value` 还是 `set value` ？**
 
 我们知道以上代码可以被拆解为：
 
@@ -277,4 +277,58 @@ value.name = '李四'
 4. 之所以会进行 **响应性** 是因为 `obj.value` 是一个 `reactive` 函数生成的 `proxy`
 
 # Ref 简单数据类型的响应性
+
+### 创建测试实例 `ref-shallow.html`
+
+~~~javascript
+const { ref, effect } = Vue
+
+const obj = ref('张三')
+
+// 调用 effect 方法
+effect(() => {
+	document.querySelector('#app').innerText = obj.value
+})
+
+setTimeout(() => {
+	obj.value = '李四'
+}, 2000);
+
+~~~
+
+### ref函数
+
+整个 `ref` 初始化的流程与复杂类型的实现完全相同，但是有一个不同的地方，需要 **特别注意**：因为当前不是复杂数据类型，所以在 `toReactive` 函数中，不会通过 `reactive` 函数处理 `value`。所以 `this._value` **不是** 一个 `proxy`，指直接返回了原值，即：**无法监听 `setter` 和 `getter`**。
+
+~~~javascript
+export function toReactive<T extends unknown>(value: T): T {
+	return isObject(value) ? reactive(value as object) : value
+}
+~~~
+
+<img src="/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/ref/RefImpl3.png" alt="RefImpl3" style="zoom:50%;" />
+
+### effect 函数
+
+与上面的实现一致。
+
+### get value()
+
+与上面的实现一致。
+
+### set value()
+
+延迟两秒钟，我们将要执行 `obj.value = '李四'` 的逻辑。我们知道在复杂数据类型下，这样的操作（`obj.value.name = '李四'`），其实是触发了 `get value` 行为。
+
+但是，此时，在 简单数据类型之下，`obj.value = '李四'` 触发的将是 `set value` 形式，这里也是 **`ref` 可以监听到简单数据类型响应性的关键。**
+
+跟踪代码，进入到 `set value(newVal)`函数，通过 `hasChanged` 方法，对比数据是否发生变化，如果发生了变化，则触发 `triggerRefValue` 函数，触发依赖，完成响应性。
+
+~~~javascript
+const hasChanged = (value, oldValue) => !Object.is(value, oldValue);
+~~~
+
+### 总结
+
+简单数据类型的响应性，不是基于 `proxy` 或 `Object.defineProperty` 进行实现的，而是通过： `get set` 语法，将对象属性绑定到查询该属性时将被调用的函数 上，使其触发 `xxx.value = '李四'` 属性时，其实是调用了 `xxx.value('李四')` 函数。而当访问 `xxx.value` 的时候，则会在实例的 `dep` 属性上对激活的 `activeEffect` 进行 `set`，以便于在 `triggerRefValue` 函数执行的时候触发 fn 触发依赖，更新数据。
 

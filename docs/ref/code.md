@@ -2,7 +2,9 @@
 outline: deep
 ---
 
-## Ref 复杂数据类型的响应性
+# ref响应性源码实现
+
+## ref 复杂数据类型的响应性
 
 ~~~javascript
 import { createDep, Dep } from './dep'
@@ -96,13 +98,13 @@ export const isObject = (val: unknown) =>
 
 现在，我们从头开始梳理一下`ref`基于对象类型的实现过程。
 
-首先调用 `createRef`函数，在这个函数里面，如果本身就是一个 `ref` 类型的数据就原样返回，如果不是那就回实例化一个 `RefImpl`。
+**首先**，调用 `createRef`函数，在这个函数里面，如果本身就是一个 `ref` 类型的数据就原样返回，如果不是那就回实例化一个 `RefImpl`。
 
 在 `new RefImpl`过程中，这个类定义了 `get` `set` 属性，他们对应的都是函数，当执行 `constructor` 的时候，拿到了 `_value`，这又引出了 `toReactive`函数。
 
 由于此时我们传递的是一个对象，那么ref的响应性是通过 `reactive`函数来实现的，返回的是一个 `Proxy`的实例，
 
-接着，当执行`effect`函数的时候，
+**接着**，当执行`effect`函数的时候，
 
 ~~~javascript
 effect(() => {
@@ -129,9 +131,10 @@ export function effect<T = any>(fn: () => T) {
 
 当执行 `return this._value`  的时候触发了 `Proxy`的 `getter`行为，触发 `track`函数做依赖收集，建立了 `targetMap` 和 `activeEffect` 之间的联系。
 
-最后当我们改变 `obj.value.name = '李四'` 的值的时候，我们可以将这段代码拆开，先执行 `obj.value`，再执行 `name = '李四'`，  首先我们触发的还是 `get value()` 函数，执行 `trackRefValue`函数，不过要注意的是当执行到 `return this._value`  的时候触发的是 `Proxy`的 `setter ` 行为，触发 `trigger`函数做派发更新，页面数据完成修改。
+**最后**，当我们改变 `obj.value.name = '李四'` 的值的时候，我们可以将这段代码拆开，先执行 `obj.value`，再执行 `name = '李四'`，  首先我们触发的还是 `get value()` 函数，执行 `trackRefValue`函数，不过要注意的是当执行到 `return this._value`  的时候触发的是 `Proxy`的 `setter ` 行为，触发 `trigger`函数做派发更新，页面数据完成修改。
 
 至此，我们完成了整个响应式数据渲染的过程。
 
 ## ref 简单数据类型的响应性
 
+### 总结

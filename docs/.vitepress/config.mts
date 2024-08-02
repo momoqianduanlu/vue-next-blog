@@ -28,7 +28,7 @@ export default defineConfig({
         ]
       },
       {
-        text: 'computed && watch',
+        text: 'computed',
         items: [
           { text: '源码阅读', link: '/computed/' },
           { text: '源码实现', link: '/computed/code' },

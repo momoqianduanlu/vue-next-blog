@@ -5,6 +5,7 @@ export default defineConfig({
   lang: 'en-US',
   title: "Vue3源码解析",
   description: "Vue3源码学习笔记",
+  base: '/vue-next-blog/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

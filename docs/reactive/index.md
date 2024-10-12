@@ -28,6 +28,8 @@ outline: deep
 
 ## reactive的实现
 
+![reactive](/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/reactive.png)
+
 ```javascript
 // if trying to observe a readonly proxy, return the readonly version.
 if (isReadonly(target)) {
@@ -117,6 +119,12 @@ export const mutableHandlers: ProxyHandler<object> = {
 
 我们关心这个函数的前两个 **参数**，一旦我们的 `target` 代理对象触发了 getter 和 setter 行为【`obj.name`】就会执行下边的函数。
 
+我们到 `packages/reactivity/src/baseHandlers.ts` 中，为它的 `get（createGetter）` 和 `set（createSetter）` 分别打入一个断点，
+
+![get](/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/get.png)
+
+![createSetter](/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/createSetter.png)
+
 ~~~javascript
 const get = /*#__PURE__*/ createGetter()
 
@@ -141,6 +149,10 @@ function createSetter(shallow = false) {
 ~~~
 
 ## effect 的实现
+
+在 `packages/reactivity/src/effect.ts` 第 `170` 行可以找到 `effect` 方法，在这里给一个断点，
+
+![effect](/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/effect.png)
 
 ~~~javascript
 export function effect<T = any>(
@@ -242,7 +254,7 @@ run() {
 
 `activeEffect` 是当前正在激活的 `effect`，`this` 指向的是 `_effect` 实例，`activeEffect` 在这里是空的，
 
-紧接着又把 this 指向了 `activeEffect`，他的目的是让我们在做依赖收集的时候去记录当前正在激活的 `activeEffect`，以便于在派发更新的时候能再次触发 `fn` 函数进行更新。
+紧接着又把 `this` 指向了 `activeEffect`，他的目的是让我们在做依赖收集的时候去记录当前正在激活的 `activeEffect`，以便于在派发更新的时候能再次触发 `fn` 函数进行更新。
 
 <img src="/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/activeEffect.png" alt="activeEffect" style="zoom:50%;" />
 
@@ -318,7 +330,7 @@ export function track(target: object, type: TrackOpTypes, key: unknown) {
 
 `depsMap` 是新生成的，所以 dep 也不存在，接着会执行 `depsMap.set(key, (dep = createDep()))`
 
-此时的 `key` 是 'name'，`value` 则是一个不会重复的 set 数组。
+此时的 `key` 是 `name`，`value` 则是一个不会重复的 set 数组。
 
 <img src="/Users/chenguosheng/Desktop/vue源码解析/vue3/vue-next-blog/docs/public/reactive/targetMap3.png" alt="targetMap3" style="zoom:50%;" />
 

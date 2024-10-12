@@ -3,11 +3,16 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/vue-next-blog/',
+  outDir: '../public',
   lang: 'en-US',
   title: "Vue3源码解析",
   description: "Vue3源码学习笔记",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    docFooter: {
+      prev: "上一页",
+      next: "下一页",
+    },
     nav: [
       { text: 'Vue2源码解析', link: 'https://momoqianduanlu.github.io/vue-analysis-blog/' },
     ],

@@ -13,6 +13,7 @@ dist
 dist
 dist-ssr
 coverage
+cache
 *.local
 
 /cypress/videos/
@@ -24,6 +25,7 @@ coverage
 .vscode/*
 !.vscode/extensions.json
 .idea
+.temp
 *.suo
 *.ntvs*
 *.njsproj

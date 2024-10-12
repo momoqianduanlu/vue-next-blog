@@ -2,10 +2,10 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/vue-next-blog/',
   lang: 'en-US',
   title: "Vue3源码解析",
   description: "Vue3源码学习笔记",
-  base: '/vue-next-blog/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

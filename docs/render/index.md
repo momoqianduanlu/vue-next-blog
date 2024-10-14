@@ -52,7 +52,7 @@ render(vnode, document.querySelector('#app'))
 
    `isSVG`：是否是 `SVG`，
 
-   当前的`vnode`肯定是存在的，所以我们代码继续往下面执行，
+   当前的`vnode`肯定是存在的，所以我们的代码继续往下面执行，
 
 3. 执行 `patch(container._vnode || null, vnode, container, null, null, null, isSVG)`
 

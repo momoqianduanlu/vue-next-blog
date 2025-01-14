@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as r}from"./chunks/framework.BFeFTQGI.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"watch/report.md","filePath":"watch/report.md"}'),a={name:"watch/report.md"};function o(c,s,n,p,_,d){return r(),e("div")}const f=t(a,[["render",o]]);export{m as __pageData,f as default};
